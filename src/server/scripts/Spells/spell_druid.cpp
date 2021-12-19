@@ -34,6 +34,7 @@ enum DruidSpells
     SPELL_DRUID_BLESSING_OF_THE_ANCIENTS            = 202360,
     SPELL_DRUID_BLESSING_OF_ELUNE                   = 202737,
     SPELL_DRUID_BLESSING_OF_ANSHE                   = 202739,
+    SPELL_DRUID_BRISTLING_FUR_GAIN_RAGE             = 204031,
     SPELL_DRUID_STARLORD_DUMMY                      = 202345,
     SPELL_DRUID_STARLORD_SOLAR                      = 202416,
     SPELL_DRUID_STARLORD_LUNAR                      = 202423,
@@ -112,7 +113,7 @@ enum GuardianAffinitySpells
 {
     SPELL_DRUID_GUARDIAN_AFFINITY_RESTO = 197491,
     SPELL_DRUID_GUARDIAN_AFFINITY_DPS   = 217615,
-
+    
     SPELL_DRUID_THICK_HIDE              = 16931,
     SPELL_DRUID_MANGLE                  = 33917,
     SPELL_DRUID_THRASH_BEAR             = 106832,
@@ -123,6 +124,34 @@ enum GuardianAffinitySpells
 enum RestorationAffinitySpells
 {
     SPELL_DRUID_RESTORATION_AFFINITY    = 197492
+};
+
+// 155835 - Bristling Fur
+class spell_dru_bristling_fur : public AuraScript
+{
+    PrepareAuraScript(spell_dru_bristling_fur);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_DRUID_BRISTLING_FUR_GAIN_RAGE });
+    }
+
+    void HandleProc(AuraEffect* /*aurEff*/, ProcEventInfo& eventInfo)
+    {
+        // BristlingFurRage = 100 * Damage / MaxHealth.
+        if (DamageInfo* damageInfo = eventInfo.GetDamageInfo())
+        {
+            Unit* target = GetTarget();
+            uint32 rage = target->GetMaxPower(POWER_RAGE) * (float)damageInfo->GetDamage() / (float)target->GetMaxHealth();
+            if (rage > 0)
+                target->CastSpell(target, SPELL_DRUID_BRISTLING_FUR_GAIN_RAGE, CastSpellExtraArgs(TRIGGERED_FULL_MASK).AddSpellMod(SPELLVALUE_BASE_POINT0, rage));
+        }
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_dru_bristling_fur::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
+    }
 };
 
 // 210706 - Gore 7.3.5
@@ -2632,6 +2661,7 @@ class aura_dru_guardian_affinity_dps : public AuraScript
 void AddSC_druid_spell_scripts()
 {
     // Spells Scripts
+    RegisterSpellScript(spell_dru_bristling_fur);
     RegisterSpellScript(spell_dru_efflorescence);
     RegisterAuraScript(spell_dru_efflorescence_aura);
     RegisterSpellScript(spell_dru_efflorescence_heal);
