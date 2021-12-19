@@ -2661,7 +2661,7 @@ class aura_dru_guardian_affinity_dps : public AuraScript
 void AddSC_druid_spell_scripts()
 {
     // Spells Scripts
-    new spell_dru_bristling_fur();
+    RegisterAuraScript(spell_dru_bristling_fur);
     RegisterSpellScript(spell_dru_efflorescence);
     RegisterAuraScript(spell_dru_efflorescence_aura);
     RegisterSpellScript(spell_dru_efflorescence_heal);
