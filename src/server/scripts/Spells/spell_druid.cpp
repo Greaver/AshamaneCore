@@ -34,6 +34,7 @@ enum DruidSpells
     SPELL_DRUID_BLESSING_OF_THE_ANCIENTS            = 202360,
     SPELL_DRUID_BLESSING_OF_ELUNE                   = 202737,
     SPELL_DRUID_BLESSING_OF_ANSHE                   = 202739,
+    SPELL_DRUID_MOONFIRE_VISUAL                     = 65518,
     SPELL_DRUID_STARLORD_DUMMY                      = 202345,
     SPELL_DRUID_STARLORD_SOLAR                      = 202416,
     SPELL_DRUID_STARLORD_LUNAR                      = 202423,
@@ -1122,7 +1123,11 @@ public:
             Unit* caster = GetCaster();
             Unit* target = GetHitUnit();
             if (caster != target)
+            {
                 caster->CastSpell(target, SPELL_DRUID_MOONFIRE_DAMAGE, true);
+                caster->CastSpell(target, SPELL_DRUID_MOONFIRE_VISUAL, true);
+
+            }
         }
 
         void Register() override
