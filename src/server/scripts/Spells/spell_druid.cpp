@@ -1125,7 +1125,7 @@ public:
             if (caster != target)
             {
                 caster->CastSpell(target, SPELL_DRUID_MOONFIRE_DAMAGE, true);
-                target->CastSpell(target, SPELL_DRUID_MOONFIRE_VISUAL, true);
+                target->CastSpell(caster, SPELL_DRUID_MOONFIRE_VISUAL, false);
 
             }
         }
