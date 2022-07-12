@@ -368,7 +368,7 @@ class spell_warl_immolate_dot : public AuraScript
         if (!caster)
             return;
 
-        caster->ModifyPower(POWER_SOUL_SHARDS, 10);
+        caster->ModifyPower(POWER_SOUL_SHARDS, 1);
         caster->CastSpell(caster, SPELL_WARLOCK_CHANNEL_DEMONFIRE_ACTIVATOR, true);
     }
 
@@ -484,7 +484,7 @@ class spell_warl_conflagrate : public SpellScript
         if (caster->HasAura(SPELL_WARLOCK_BACKDRAFT_AURA))
             caster->CastSpell(caster, SPELL_WARLOCK_BACKDRAFT, true);
 
-        caster->ModifyPower(POWER_SOUL_SHARDS, 50);
+        caster->ModifyPower(POWER_SOUL_SHARDS, 5);
 
         if (caster->HasAura(SPELL_WARLOCK_ROARING_BLAZE))
         {
@@ -1216,7 +1216,7 @@ class aura_warl_unstable_affliction : public AuraScript
     void HandleRemove(const AuraEffect* /*aurEff*/, AuraEffectHandleModes /* mode */)
     {
         if (GetCaster() && GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_DEATH)
-            GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 10);
+            GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 1);
     }
 
     void Register() override
@@ -1317,7 +1317,7 @@ public:
 
                 if (Player* player = GetCaster()->ToPlayer())
                     if (player->GetPower(POWER_SOUL_SHARDS) < player->GetMaxPower(POWER_SOUL_SHARDS))
-                        player->SetPower(POWER_SOUL_SHARDS, player->GetPower(POWER_SOUL_SHARDS) + 10);
+                        player->SetPower(POWER_SOUL_SHARDS, player->GetPower(POWER_SOUL_SHARDS) + 1);
             }
 
             caster->Variables.Set("SoulShardAgonyTick", soulShardAgonyTick);
@@ -1587,7 +1587,7 @@ public:
         void HandleRemove(const AuraEffect* /*aurEff*/, AuraEffectHandleModes /* mode */)
         {
             if (GetCaster() && GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_DEATH)
-                GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 10);
+                GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 1);
         }
 
         void HandleDummyPeriodic(AuraEffect const* /* auraEffect */)
@@ -1883,7 +1883,7 @@ public:
             {
                 AuraRemoveMode removeMode = GetTargetApplication()->GetRemoveMode();
                 if (removeMode == AURA_REMOVE_BY_DEATH)
-                    GetCaster()->SetPower(POWER_SOUL_SHARDS, GetCaster()->GetPower(POWER_SOUL_SHARDS) + 50);
+                    GetCaster()->SetPower(POWER_SOUL_SHARDS, GetCaster()->GetPower(POWER_SOUL_SHARDS) + 5);
             }
         }
 
@@ -3609,7 +3609,7 @@ class spell_warl_incinerate : public SpellScript
 
     void HandleOnHitMainTarget(SpellEffIndex /*effIndex*/)
     {
-        GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 20);
+        GetCaster()->ModifyPower(POWER_SOUL_SHARDS, 2);
     }
 
     void HandleOnHitTarget(SpellEffIndex /*effIndex*/)

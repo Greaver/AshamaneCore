@@ -934,6 +934,10 @@ uint32 Aura::GetMaxStackAmount() const
         Player* playerCaster = GetCaster()->ToPlayer();
         playerCaster->ApplySpellMod(GetSpellInfo()->Id, SPELLMOD_STACK_AMOUNT, maxStackAmount);
         playerCaster->ApplySpellMod(GetSpellInfo()->Id, SPELLMOD_STACK_AMOUNT2, maxStackAmount);
+        //Warlock Writhe In Agony stackmod
+        //Remove this after proper fix has been applied!
+        if (playerCaster->HasAura(196102))
+            maxStackAmount += 4;
     }
 
     return maxStackAmount;
