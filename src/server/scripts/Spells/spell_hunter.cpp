@@ -1155,6 +1155,7 @@ public:
         PrepareSpellScript(spell_hun_arcane_shot_SpellScript);
 
         int32 focus;
+        
         void HandleOnHit()
         {
             Unit* caster = GetCaster();
@@ -1169,7 +1170,7 @@ public:
                 caster->RemoveAurasDueToSpell(SPELL_HUNTER_MARKING_TARGETS);                
             }
             focus = caster->GetPower(POWER_FOCUS);
-            caster->SetPower(POWER_FOCUS, focus +5);
+            caster->SetPower(POWER_FOCUS, focus +8);
         }
 
         void Register() override
