@@ -1211,7 +1211,7 @@ public:
                     caster->CastSpell(target, SPELL_HUNTER_HUNTERS_MARK_AURA, true);//Mark the initial target
                     std::list<Unit*> targetList;//Get a list of all markable mobs within 8.0f of the initial target
                     float radius = 8.0f;                    
-                    target->GetFriendlyUnitListInRange(targetList, radius);//This may need some improving.
+                    target->GetAnyUnitListInRange(targetList, radius);//Gets any unit withing the given radius of the initial unit.
 
                     if (!targetList.empty())//Only triggers if we have something on the list
                         for (auto itr : targetList)//Loop through the list of targets
