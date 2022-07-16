@@ -1207,23 +1207,16 @@ public:
                 caster->RemoveAurasDueToSpell(SPELL_HUNTER_MARKING_TARGETS);
 
                 if (Unit* target = GetHitUnit())
-                {
-                    caster->CastSpell(target, SPELL_HUNTER_HUNTERS_MARK_AURA, true);
+                {                    
+                    caster->CastSpell(target, SPELL_HUNTER_HUNTERS_MARK_AURA, true);//Mark the initial target
+                    std::list<Unit*> targetList;//Get a list of all markable mobs within 8.0f of the initial target
+                    float radius = 8.0f;                    
+                    target->GetFriendlyUnitListInRange(targetList, radius);//This may need some improving.
 
-                    //Get a list of all markable mobs within 8.0f of the initial target
-                    std::list<Unit*> targetList;
-                    float radius = 8.0f;
-                    target->GetFriendlyUnitListInRange(targetList, radius);
-                    if (!targetList.empty())
-                    {
-                        for (auto itr : targetList)
-                        {
-                            {
-                                if(itr->IsHostileToPlayers())
-                                caster->CastSpell(itr, SPELL_HUNTER_HUNTERS_MARK_AURA, true);
-                            }
-                        }
-                    }
+                    if (!targetList.empty())//Only triggers if we have something on the list
+                        for (auto itr : targetList)//Loop through the list of targets
+                            if(itr->IsHostileToPlayers())//Only ever true if the target is hostile towards players ( may need some improvements, altho it shouldnt trigger for neutral mobs )
+                                caster->CastSpell(itr, SPELL_HUNTER_HUNTERS_MARK_AURA, true);//Mark the target
                 }
             }
         }
