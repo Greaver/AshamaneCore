@@ -1207,10 +1207,27 @@ public:
                 caster->RemoveAurasDueToSpell(SPELL_HUNTER_MARKING_TARGETS);
 
                 if (Unit* target = GetHitUnit())
+                {
                     caster->CastSpell(target, SPELL_HUNTER_HUNTERS_MARK_AURA, true);
+
+                    //Get a list of all markable mobs within 8.0f of the initial target
+                    std::list<Unit*> targetList;
+                    float radius = 8.0f;
+                    target->GetFriendlyUnitListInRange(targetList, radius);
+                    if (!targetList.empty())
+                    {
+                        for (auto itr : targetList)
+                        {
+                            {
+                                if(itr->IsHostileToPlayers())
+                                caster->CastSpell(itr, SPELL_HUNTER_HUNTERS_MARK_AURA, true);
+                            }
+                        }
+                    }
+                }
             }
         }
-
+         
         void Register() override
         {
             OnHit += SpellHitFn(spell_hun_multi_shot_SpellScript::HandleOnHit);
