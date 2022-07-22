@@ -1,8 +1,8 @@
 version: 1.0.{build}
-build_script:
 environment:
 matrix:
   fast_finish: true
+build_script:
 
 - sh: >-
     mkdir build && cd build
