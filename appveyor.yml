@@ -1,7 +1,4 @@
 version: 1.0.{build}
-environment:
-matrix:
-  fast_finish: true
 build_script:
 
 - sh: >-
