@@ -28,6 +28,7 @@
 
 enum eQuests
 {
+	QUEST_DEMON_HUNTER_INTRO_TRACKER    = 40076
     QUEST_INVASION_BEGIN        = 40077,
     QUEST_ASHTONGUE_FORCES      = 40378,
     QUEST_COILSKAR_FORCES       = 40379,
@@ -41,6 +42,7 @@ enum eQuests
 
 enum eScenes
 {
+	SPELL_START_DEMON_HUNTER_PLAY_SCENE = 193525
     SPELL_SCENE_MARDUM_WELCOME          = 193525,
     SPELL_SCENE_MARDUM_LEGION_BANNER    = 191677,
     SPELL_SCENE_MARDUM_ASHTONGUE_FORCES = 189261,
@@ -80,6 +82,36 @@ enum eMisc
     PLAYER_CHOICE_DH_SPEC_SELECTION             = 231,
     PLAYER_CHOICE_DH_SPEC_SELECTION_DEVASTATION = 478,
     PLAYER_CHOICE_DH_SPEC_SELECTION_VENGEANCE   = 479,
+};
+
+class scene_demonhunter_intro : public SceneScript
+{
+public:
+    scene_demonhunter_intro() : SceneScript("scene_demonhunter_intro") { }
+
+    void OnSceneStart(Player* player, uint32 /*sceneInstanceID*/, SceneTemplate const* /*sceneTemplate*/) override
+    {
+        Conversation::CreateConversation(CONVO_DEMONHUNTER_INTRO_START, player, *player, player->GetGUID(), nullptr);
+    }
+
+    void OnSceneComplete(Player* player, uint32 /*sceneInstanceID*/, SceneTemplate const* /*sceneTemplate*/) override
+    {
+        PhasingHandler::OnConditionChange(player);
+    }
+};
+
+// 196030 - Start: Quest Invis
+class spell_demon_hunter_intro_aura : public AuraScript
+{
+    void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+    {
+        GetTarget()->CastSpell(nullptr, SPELL_START_DEMON_HUNTER_PLAY_SCENE, true);
+    }
+
+    void Register() override
+    {
+        AfterEffectRemove += AuraEffectRemoveFn(spell_demon_hunter_intro_aura::AfterRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+    }
 };
 
 class PlayerScript_mardum_welcome_scene_trigger : public PlayerScript
@@ -887,6 +919,8 @@ class spell_mardum_back_to_black_temple : public SpellScript
 
 void AddSC_zone_mardum()
 {
+    new scene_demonhunter_intro();
+    RegisterSpellScript(spell_demon_hunter_intro_aura);
     new PlayerScript_mardum_welcome_scene_trigger();
     new scene_mardum_welcome();
     new npc_kayn_sunfury_welcome();
